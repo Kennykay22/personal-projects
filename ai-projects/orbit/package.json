@@ -1,0 +1,15 @@
+{
+  "name": "orbit-space-observatory",
+  "version": "10.0.0",
+  "private": true,
+  "type": "module",
+  "description": "An AI-assisted interactive space observatory.",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node --test",
+    "generate:spacecraft": "node scripts/generate-craft.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

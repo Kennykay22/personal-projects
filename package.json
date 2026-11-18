@@ -1,0 +1,13 @@
+{
+  "name": "personal-projects",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal projects organized into AI-assisted and non-AI categories.",
+  "scripts": {
+    "start": "npm --prefix ai-projects/orbit start",
+    "test": "npm --prefix ai-projects/orbit test"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

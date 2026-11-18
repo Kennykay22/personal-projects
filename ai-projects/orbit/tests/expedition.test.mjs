@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {eclipseState,propellantFraction,surfaceHeight,slopeAt} from '../dist/expedition-math.js';
+test('eclipse classification separates total annular partial and no overlap',()=>{assert.equal(eclipseState(2,.6,12,3,0).type,'Total eclipse');assert.equal(eclipseState(2,.6,12,5,0).type,'Annular eclipse');assert.equal(eclipseState(2,.6,12,3,.5).type,'Partial eclipse');assert.equal(eclipseState(2,.6,12,3,2).type,'No eclipse')});
+test('rocket equation fuel fraction is bounded and responds to impulse',()=>{assert.equal(propellantFraction(0),0);assert.ok(propellantFraction(5)>0&&propellantFraction(5)<1);assert.ok(propellantFraction(5,900)<propellantFraction(5,450));assert.throws(()=>propellantFraction(-1),RangeError)});
+test('surface relief is reproducible and its slope is finite',()=>{assert.equal(surfaceHeight(2,3,1),surfaceHeight(2,3,1));assert.notEqual(surfaceHeight(2,3,1),surfaceHeight(2,3,2));for(let x=-8;x<8;x+=.2)assert.ok(Number.isFinite(slopeAt(x,1))&&slopeAt(x,1)>=0&&slopeAt(x,1)<90)});

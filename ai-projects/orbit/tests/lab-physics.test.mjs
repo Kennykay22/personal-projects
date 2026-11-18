@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {simulateDrop,dropAcceleration,schwarzschildKm,sampleDrop} from '../dist/lab-physics.js';
+test('vacuum impact agrees with analytic time on three worlds',()=>{for(const g of [3.7,9.8,23.1]){const r=simulateDrop({height:30,g});assert.ok(Math.abs(r.impacts[0].t-Math.sqrt(60/g))<.005);assert.equal(r.samples.at(-1).y,0)}});
+test('vacuum trajectories do not depend on mass while quadratic drag does',()=>{const a=simulateDrop({mass:10}),b=simulateDrop({mass:100});assert.equal(a.impacts[0].t,b.impacts[0].t);const air=simulateDrop({mass:10,radius:.8,density:1.225});assert.ok(air.impacts[0].t>a.impacts[0].t);assert.ok(dropAcceleration(-20,9.8,10,.8,1.225)>-9.8)});
+test('bounce returns upward with energy loss and never penetrates ground',()=>{const r=simulateDrop({restitution:.7});assert.ok(r.impacts.length>1);assert.ok(r.impacts[1].speed<r.impacts[0].speed);assert.ok(r.samples.every(s=>s.y>=0));assert.ok(r.samples.some(s=>s.t>r.impacts[0].t&&s.v>0));});
+test('upward launch rises and sample retrieval clamps to recorded interval',()=>{const r=simulateDrop({launch:20});assert.ok(r.samples.some(s=>s.y>20));assert.equal(sampleDrop(r.samples,-1),r.samples[0]);assert.equal(sampleDrop(r.samples,999),r.samples.at(-1));});
+test('Schwarzschild radius scales linearly with mass',()=>{assert.ok(Math.abs(schwarzschildKm(1)-2.9533)<.001);assert.equal(schwarzschildKm(10),10*schwarzschildKm(1));assert.throws(()=>schwarzschildKm(0),RangeError);});
